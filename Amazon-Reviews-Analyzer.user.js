@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Amazon Reviews Analyzer
 // @namespace    https://violentmonkey.github.io
-// @version      2.0.0
+// @version      2.0.1
 // @releaseDate  2025-01-09
 // @description  Filters and sorts all helpful reviews of your own account
 // @author       DiscoJay
@@ -31,9 +31,9 @@ function createReviewsAnalyzerBlock() {
         return;
     }
 
-    const shopContentContainer = document.querySelector('#shopContentContainer');
-    if (!shopContentContainer) {
-        log('ERROR: #shopContentContainer not found!');
+    const insertAfterThisElement = document.querySelector('.shop-influencer-profile-section');
+    if (!insertAfterThisElement) {
+        log('ERROR: .shop-influencer-profile-section not found!');
         return;
     }
 
@@ -95,7 +95,7 @@ function createReviewsAnalyzerBlock() {
     araButtons.append(analyzeButton, exportButton, statsOverview, infoButton);
     araHeader.appendChild(araButtons);
     araContainer.append(araHeader, araReviews);
-    shopContentContainer.insertAdjacentElement('beforebegin', araContainer);
+    insertAfterThisElement.insertAdjacentElement('afterend', araContainer);
 }
 
 function createTextLink(review) {
