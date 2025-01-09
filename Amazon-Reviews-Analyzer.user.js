@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Amazon Reviews Analyzer
 // @namespace    https://violentmonkey.github.io
-// @version      2.0.1
+// @version      2.0.2
 // @releaseDate  2025-01-09
 // @description  Filters and sorts all helpful reviews of your own account
 // @author       DiscoJay
@@ -532,6 +532,7 @@ function getBaseUrl() {
     if (pathSegments.length >= 3 && pathSegments[1] === 'gp' && pathSegments[2] === 'profile') {
         pathSegments[1] = 'shop';
         pathSegments[2] = 'profile';
+        pathSegments.length = 4; // Remove any additional parameter elements like "/ref=cm_cr_dp_d_gw_tr"
         pathSegments.push('getReviews');
     } else {
         log('Unexpected URL structure. Attempting to append /getReviews.');
