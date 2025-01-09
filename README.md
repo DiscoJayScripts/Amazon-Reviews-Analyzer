@@ -13,7 +13,7 @@ To install the script, follow these steps:
 1. Make sure you have a UserScript manager installed in your browser (ViolentMonkey, TamperMonkey, ...). If you don't have any, simply search for "ViolentMonkey" on your browser's extension page and install it.
 2. Install the userscript from the repository:
   
-   https://github.com/DiscoJayScripts/Amazon-Reviews-Analyzer/blob/main/Amazon-Reviews-Analyzer.user.js
+   https://github.com/DiscoJayScripts/Amazon-Reviews-Analyzer/raw/main/Amazon-Reviews-Analyzer.user.js
 5. Navigate to your Amazon profile page:
    
    US: https://www.amazon.com/gp/profile
