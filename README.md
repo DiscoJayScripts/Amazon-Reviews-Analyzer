@@ -32,4 +32,4 @@ To install the script, follow these steps:
 - Nothing is updated automatically. You can to run the scan manually as often as you like.
 - This only works on your own profile page. It does not work for any other user profiles.
 
-![AmazonReviewsAnalyzer-Screenshot01](https://github.com/user-attachments/assets/0b8e2454-f6fc-4463-8068-f5ba6b7919b9)
+![2025-01-09 Amazon Review Analyzer](https://github.com/user-attachments/assets/6b698742-e51b-40de-9bd8-5bf1cfe5b53b)
