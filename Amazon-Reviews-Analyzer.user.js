@@ -3,8 +3,7 @@
 // @namespace    https://violentmonkey.github.io
 // @description  Filters and sorts all helpful reviews of your own account
 // @author       DiscoJay
-// @version      2.0.3
-// @releaseDate  2025-01-10
+// @version      2.0.4
 // @license      GPL
 // @match        *://www.amazon.com/gp/profile/amzn1.account.*
 // @match        *://www.amazon.ae/gp/profile/amzn1.account.*
@@ -34,10 +33,11 @@
 // ==/UserScript==
 
 // ==================== Configuration ====================
+const RELEASE_DATE = '2025-01-10';
 const DEBUG_MODE = true;
-const REVIEWS_PER_PAGE = 100; // Number of reviews per page
-const MAX_ITERATIONS = 0; // Maximum number of pages to fetch (for testing purposes); Use 0 for no limit
-const REQUEST_DELAY = 1100; // Delay between requests for not running into temporary IP bans
+const REVIEWS_PER_PAGE = 100; // Number of reviews to load with each request (max: 100)
+const MAX_ITERATIONS = 0; // Maximum number of requests (for testing purposes); Use 0 for no limit
+const REQUEST_DELAY = 1100; // Delay (in ms) between requests for not running into temporary IP bans
 let reviewData = [];
 let idCount = 1; // Unique identifier for each review entry
 // ========================================================
@@ -456,7 +456,7 @@ function showInfoBox() {
     version.innerHTML = `<strong>Version:</strong> ${GM_info.script.version}`;
 
     const releaseDateElem = document.createElement('p');
-    releaseDateElem.innerHTML = `<strong>Release Date:</strong> ${GM_info.script.releaseDate}`;
+    releaseDateElem.innerHTML = `<strong>Release Date:</strong> ${RELEASE_DATE}`;
 
     details.appendChild(header);
     details.appendChild(author);
