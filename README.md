@@ -31,11 +31,16 @@ To install the script, follow these steps:
 8. Wait for all your reviews to finish loading. Depending on the total amount, this might take a short while. It takes about 1 second to read 100 reviews.
 9. Repeat this process every now and then. All reviews with an updated hearts count will be shown separately.
 
-## **Some notes**
+## **Notes**
 
 - None of your data leaves your browser.
 - Everything is either displayed dynamically or stored locally in your browser's localStorage.
 - Nothing is updated automatically. You can run the scan manually as often as you like.
 - This only works on your own profile page. It does not work for any other user profiles.
+
+## **Screenshots**
+After your first scan, you will only see the default list with all reviews that have been marked as helpful at least once.
+
+The green and blue lines will come up as soon as updated heart counts are found with one of your future scans.
 
 ![2025-01-09 Amazon Review Analyzer](https://github.com/user-attachments/assets/6b698742-e51b-40de-9bd8-5bf1cfe5b53b)
