@@ -4,7 +4,7 @@
 // @description  Filters and sorts all helpful reviews of your own account
 // @author       DiscoJay
 // @version      2.0.3
-// @releaseDate  2025-01-09
+// @releaseDate  2025-01-10
 // @license      GPL
 // @match        *://www.amazon.com/gp/profile/amzn1.account.*
 // @match        *://www.amazon.ae/gp/profile/amzn1.account.*
