@@ -1,12 +1,34 @@
 // ==UserScript==
 // @name         Amazon Reviews Analyzer
 // @namespace    https://violentmonkey.github.io
-// @version      2.0.2
-// @releaseDate  2025-01-09
 // @description  Filters and sorts all helpful reviews of your own account
 // @author       DiscoJay
+// @version      2.0.3
+// @releaseDate  2025-01-09
 // @license      GPL
-// @match        *://www.amazon.*/gp/profile/amzn1.account.*
+// @match        *://www.amazon.com/gp/profile/amzn1.account.*
+// @match        *://www.amazon.ae/gp/profile/amzn1.account.*
+// @match        *://www.amazon.com.be/gp/profile/amzn1.account.*
+// @match        *://www.amazon.ca/gp/profile/amzn1.account.*
+// @match        *://www.amazon.cn/gp/profile/amzn1.account.*
+// @match        *://www.amazon.co.jp/gp/profile/amzn1.account.*
+// @match        *://www.amazon.co.uk/gp/profile/amzn1.account.*
+// @match        *://www.amazon.co.za/gp/profile/amzn1.account.*
+// @match        *://www.amazon.com.au/gp/profile/amzn1.account.*
+// @match        *://www.amazon.com.br/gp/profile/amzn1.account.*
+// @match        *://www.amazon.com.mx/gp/profile/amzn1.account.*
+// @match        *://www.amazon.com.tr/gp/profile/amzn1.account.*
+// @match        *://www.amazon.de/gp/profile/amzn1.account.*
+// @match        *://www.amazon.eg/gp/profile/amzn1.account.*
+// @match        *://www.amazon.es/gp/profile/amzn1.account.*
+// @match        *://www.amazon.fr/gp/profile/amzn1.account.*
+// @match        *://www.amazon.in/gp/profile/amzn1.account.*
+// @match        *://www.amazon.it/gp/profile/amzn1.account.*
+// @match        *://www.amazon.nl/gp/profile/amzn1.account.*
+// @match        *://www.amazon.pl/gp/profile/amzn1.account.*
+// @match        *://www.amazon.sa/gp/profile/amzn1.account.*
+// @match        *://www.amazon.se/gp/profile/amzn1.account.*
+// @match        *://www.amazon.sg/gp/profile/amzn1.account.*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=amazon.com
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
