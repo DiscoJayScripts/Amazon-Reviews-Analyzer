@@ -3,7 +3,7 @@
 // @namespace    https://violentmonkey.github.io
 // @description  Filters and sorts all helpful reviews of your own account
 // @author       DiscoJay
-// @version      2.0.4
+// @version      2.1.0
 // @license      GPL
 // @match        *://www.amazon.com/gp/profile/amzn1.account.*
 // @match        *://www.amazon.ae/gp/profile/amzn1.account.*
@@ -33,14 +33,20 @@
 // ==/UserScript==
 
 // ==================== Configuration ====================
-const RELEASE_DATE = '2025-01-10';
-const DEBUG_MODE = true;
+const RELEASE_DATE = '2025-03-13';
+const DEBUG_MODE = false;
 const REVIEWS_PER_PAGE = 100; // Number of reviews to load with each request (max: 100)
 const MAX_ITERATIONS = 0; // Maximum number of requests (for testing purposes); Use 0 for no limit
 const REQUEST_DELAY = 1100; // Delay (in ms) between requests for not running into temporary IP bans
+const OUTPUT_ALL = false; //Beta; true=All reviews in chronological order; false=Only reviews with hearts, sorted by number of hearts
+// ========================================================
+
 let reviewData = [];
 let idCount = 1; // Unique identifier for each review entry
-// ========================================================
+
+const emojisArray = ['🪩', 'ℹ️', '🔘'];
+const fallback = '🛈';
+const infoIcon = getFirstCompatibleEmoji(emojisArray, fallback);
 
 const araContainer = document.createElement('div');
 const araReviews = document.createElement('div');
@@ -83,7 +89,7 @@ function createReviewsAnalyzerBlock() {
     exportButton.classList.add('navBtn', 'disabled');
 
     const infoButton = document.createElement('div');
-    infoButton.textContent = '🪩';
+    infoButton.textContent = infoIcon;
     infoButton.title = 'Amazon Reviews Analyzer - Info';
     infoButton.id = 'infoReviewsButton';
     infoButton.classList.add('emojiLink');
@@ -223,7 +229,7 @@ function visualizeReviewData(reviewData, newReviews) {
         .filter(review => review.reviewHelpfulVotes > 0)
         .sort((a, b) => b.reviewHelpfulVotes - a.reviewHelpfulVotes);
 
-    sortedReviews.forEach(review => {
+        (OUTPUT_ALL ? reviewData : sortedReviews).forEach(review => {
         const container = document.createElement("div");
         container.id = `review-${review.reviewId}`;
 
@@ -414,7 +420,7 @@ function toggleText(index) {
 // ==================== Info Box Functionality ====================
 
 /**
- * Function to display the Info Box when the 🪩 icon is clicked.
+ * Function to display the Info Box when the infoIcon 🪩 is clicked.
  */
 function showInfoBox() {
     // Check if the info box already exists
@@ -438,7 +444,7 @@ function showInfoBox() {
 
     const emoji = document.createElement('div');
     emoji.classList.add('info-emoji');
-    emoji.textContent = '🪩';
+    emoji.textContent = infoIcon;
 
     const details = document.createElement('div');
     details.classList.add('info-details');
@@ -490,6 +496,34 @@ function closeInfoBox() {
         document.body.removeChild(overlay);
     }
 }
+
+/**
+ * Function to check if an emoji is supported
+ */
+function isEmojiSupported(emoji) {
+    const testCanvas = document.createElement('canvas');
+    testCanvas.width = testCanvas.height = 1;
+    const context = testCanvas.getContext('2d');
+    // Draw the emoji with an offset so any visible rendering appears on the canvas.
+    context.fillText(emoji, -4, 4);
+    const pixelData = context.getImageData(0, 0, 1, 1).data;
+    return pixelData[3] > 0; // Returns true if the alpha channel is nonzero.
+}
+
+/**
+ * Function to test and return the first compatible emoji from an array
+ * Fallback is passed as the second parameter
+ */
+function getFirstCompatibleEmoji(emojisArray, fallback) {
+    for (let emoji of emojisArray) {
+        if (isEmojiSupported(emoji)) {
+            return emoji;  // Return the first compatible emoji
+        }
+    }
+    return fallback; // Return the fallback if no emoji is supported
+}
+
+// ==================== Misc ====================
 
 /**
  * Utility function to log messages with a specific prefix for clarity.
