@@ -16,17 +16,17 @@ To install the script, follow these steps:
    https://github.com/DiscoJayScripts/Amazon-Reviews-Analyzer/raw/main/Amazon-Reviews-Analyzer.user.js
 5. Navigate to your Amazon profile page:
    
-   US: https://www.amazon.com/gp/profile
+   US: https://www.amazon.com/profile
 
-   UK: https://www.amazon.co.uk/gp/profile
+   UK: https://www.amazon.co.uk/profile
 
-   CA: https://www.amazon.ca/gp/profile
+   CA: https://www.amazon.ca/profile
 
-   DE: https://www.amazon.de/gp/profile
+   DE: https://www.amazon.de/profile
 
-   FR: https://www.amazon.fr/gp/profile
+   FR: https://www.amazon.fr/profile
    
-   etc. (just add `/gp/profile` after your main Amazon URL)
+   etc. (just add `/profile` after your country's main Amazon URL)
 7. You should now see an additional section. Click the first button to fetch all your reviews.
 8. Wait for all your reviews to finish loading. Depending on the total amount, this might take a short while. It takes about 1 second to read 100 reviews.
 9. Repeat this process every now and then. All reviews with an updated hearts count will be shown separately.
