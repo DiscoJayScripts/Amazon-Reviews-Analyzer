@@ -3,7 +3,7 @@
 // @namespace    https://violentmonkey.github.io
 // @description  Filters and sorts all helpful reviews of your own account
 // @author       DiscoJay
-// @version      2.1.0
+// @version      2.2.0
 // @license      GPL
 // @match        *://www.amazon.com/gp/profile/amzn1.account.*
 // @match        *://www.amazon.ae/gp/profile/amzn1.account.*
@@ -33,7 +33,7 @@
 // ==/UserScript==
 
 // ==================== Configuration ====================
-const RELEASE_DATE = '2025-03-13';
+const RELEASE_DATE = '2025-07-28';
 const DEBUG_MODE = false;
 const REVIEWS_PER_PAGE = 100; // Number of reviews to load with each request (max: 100)
 const MAX_ITERATIONS = 0; // Maximum number of requests (for testing purposes); Use 0 for no limit
@@ -154,6 +154,7 @@ function visualizeReviewData(reviewData, newReviews) {
 
     const fragment = document.createDocumentFragment();
 
+    // New votes section
     if (newReviews.length > 0) {
         const newReviewsDiv = document.createElement('div');
         newReviewsDiv.innerHTML = `<h3>🆕 New votes since last scan:</h3>`;
@@ -162,9 +163,9 @@ function visualizeReviewData(reviewData, newReviews) {
             const reviewElement = document.createElement('div');
             reviewElement.classList.add('new');
 
-            let voteChange = review.newVotes - review.oldVotes;
-            let voteChangeText = voteChange > 0 ? `(+${voteChange})` : `(${voteChange})`;
-            let voteChangeColor = voteChange > 0 ? 'green' : 'red';
+            const voteChange = review.newVotes - review.oldVotes;
+            const voteChangeText = voteChange > 0 ? `(+${voteChange})` : `(${voteChange})`;
+            const voteChangeColor = voteChange > 0 ? 'green' : 'red';
 
             // Create external link for the product title
             const textLink = createTextLink(review);
@@ -185,7 +186,7 @@ function visualizeReviewData(reviewData, newReviews) {
         fragment.appendChild(newReviewsDiv);
     }
 
-    // Add the section for the 10 last updated reviews
+    // Recently updated votes section
     const recentReviews = reviewData
         .filter(review => review.ts) // Filter reviews that have a ts field
         .sort((a, b) => new Date(b.ts) - new Date(a.ts)) // Sort by ts in descending order
@@ -219,8 +220,70 @@ function visualizeReviewData(reviewData, newReviews) {
         fragment.appendChild(recentReviewsDiv);
     }
 
-    // Add the section for the most helpful reviews
-    const helpfulReviews = document.createElement("div");
+    // Unavailable reviews section
+    const storedProducts = getStoredProductData();
+    // Only consider products with >0 hearts
+    const unavailableReviews = storedProducts.filter(stored => stored.votes > 0 && !reviewData.some(r => r.reviewId === stored.id));
+    if (unavailableReviews.length > 0) {
+        const unavailableDiv = document.createElement('div');
+        unavailableDiv.id = 'araUnavailableList';
+        // Header with toggle collapsed by default
+        unavailableDiv.innerHTML = `<h3>🗑️ Unavailable reviews: ${unavailableReviews.length} <button id="toggleUnavailable" class="emojiLink" style="margin-left: 8px; font-size: small">[ show ]</button></h3>`;
+        const listDiv = document.createElement('div');
+        listDiv.id = 'unavailableItems';
+        listDiv.style.display = 'none';
+        listDiv.style.fontFamily = 'monospace';
+
+        unavailableReviews.forEach(item => {
+            const itemDiv = document.createElement('div');
+            // ASIN text or link
+            if (item.asin) {
+                const productLink = document.createElement('a');
+                productLink.href = `https://${document.location.hostname}/dp/${item.asin}`;
+                productLink.target = '_blank';
+                productLink.textContent = item.asin;
+                itemDiv.appendChild(productLink);
+            } else {
+                const naSpan = document.createElement('span');
+                naSpan.textContent = 'n/a';
+                // Pad to match ASIN length
+                naSpan.textContent = naSpan.textContent.padEnd(10, ' ');
+                itemDiv.appendChild(naSpan);
+            }
+            itemDiv.innerHTML += ': ';
+            // Review external link
+            const reviewLink = document.createElement('a');
+            reviewLink.href = `https://${document.location.hostname}/gp/customer-reviews/${item.id}`;
+            reviewLink.target = '_blank';
+            reviewLink.textContent = 'Removed Review';
+            reviewLink.classList.add('removed-review');
+            itemDiv.appendChild(reviewLink);
+            itemDiv.innerHTML += ` 💔${item.votes}`;
+            listDiv.appendChild(itemDiv);
+        });
+
+        unavailableDiv.appendChild(listDiv);
+        fragment.appendChild(unavailableDiv);
+
+        document.addEventListener('click', e => {
+            if (e.target && e.target.id === 'toggleUnavailable') {
+                if (listDiv.style.display === 'none') {
+                    listDiv.style.display = 'block';
+                    e.target.textContent = '[ hide ]';
+                } else {
+                    listDiv.style.display = 'none';
+                    e.target.textContent = '[ show ]';
+                }
+            }
+        });
+
+        // Separator before most helpful section
+        const hrDivider = document.createElement('hr');
+        hrDivider.style.margin = '20px 0';
+        unavailableDiv.appendChild(hrDivider);
+    }
+// Most helpful reviews section
+    const helpfulReviews = document.createElement('div');
     helpfulReviews.id = 'araHelpfulList';
     helpfulReviews.innerHTML = `<h3>🏆 Most helpful reviews:</h3>`;
     fragment.appendChild(helpfulReviews);
@@ -229,12 +292,12 @@ function visualizeReviewData(reviewData, newReviews) {
         .filter(review => review.reviewHelpfulVotes > 0)
         .sort((a, b) => b.reviewHelpfulVotes - a.reviewHelpfulVotes);
 
-        (OUTPUT_ALL ? reviewData : sortedReviews).forEach(review => {
+    (OUTPUT_ALL ? reviewData : sortedReviews).forEach(review => {
         const container = document.createElement("div");
         container.id = `review-${review.reviewId}`;
 
         // Product Image
-        const imageContainer = document.createElement("img");
+        const imageContainer = document.createElement('img');
         imageContainer.classList.add('productImage');
         imageContainer.src = review.productImage && !review.productImage.includes('transparent-pixel')
             ? review.productImage.replace('.jpg', '.US100.jpg')
@@ -300,7 +363,7 @@ function visualizeReviewData(reviewData, newReviews) {
     araReviews.innerHTML = '';
     araReviews.appendChild(fragment);
 
-    // Store totalReviews, totalVotes, and lastScanDate to localStorage under "stats"
+    // Store and update stats
     const currentDate = new Date().toISOString().split('T')[0];
     storeSettingsData({ stats: { totalReviews, totalVotes, lastScanDate: currentDate }, options: {} });
 
@@ -1095,6 +1158,10 @@ input:checked + .ara-toggle-slider:before {
 
 .info-details p {
   margin: 5px 0;
+}
+
+.removed-review {
+  text-decoration: line-through !important;
 }
 `;
 document.head.appendChild(style);
