@@ -38,7 +38,7 @@ const DEBUG_MODE = false;
 const REVIEWS_PER_PAGE = 100; // Number of reviews to load with each request (max: 100)
 const MAX_ITERATIONS = 0; // Maximum number of requests (for testing purposes); Use 0 for no limit
 const REQUEST_DELAY = 1100; // Delay (in ms) between requests for not running into temporary IP bans
-const OUTPUT_ALL = false; //Beta; true=All reviews in chronological order; false=Only reviews with hearts, sorted by number of hearts
+const OUTPUT_ALL = false; // Beta; true=All reviews in chronological order; false=Only reviews with hearts, sorted by number of hearts
 // ========================================================
 
 let reviewData = [];
@@ -768,7 +768,9 @@ function parseResponse(responseText) {
 
         // Extract review helpful votes
         const reviewHelpfulVotesElement = card.querySelector('span.review-reaction-count');
-        const reviewHelpfulVotes = reviewHelpfulVotesElement ? parseInt(reviewHelpfulVotesElement.textContent.trim(), 10) : 0;
+        const reviewHelpfulVotesText = reviewHelpfulVotesElement ? reviewHelpfulVotesElement.textContent.trim() : '';
+        const reviewHelpfulVotesCleaned = reviewHelpfulVotesText.replace(/\D+/g, '');
+        const reviewHelpfulVotes = reviewHelpfulVotesCleaned ? parseInt(reviewHelpfulVotesCleaned, 10) : 0;
 
         // Extract product image
         const productImageElement = card.querySelector('img.review-product-thumbnail');
