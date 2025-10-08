@@ -12,9 +12,9 @@ To install the script, follow these steps:
 
 1. Make sure you have a UserScript manager installed in your browser (ViolentMonkey, TamperMonkey, ...). If you don't have any, simply search for "ViolentMonkey" on your browser's extension page and install it.
 2. Install the userscript from the repository:
-  
+
    https://github.com/DiscoJayScripts/Amazon-Reviews-Analyzer/raw/main/Amazon-Reviews-Analyzer.user.js
-5. Navigate to your Amazon profile page:
+3. Navigate to your Amazon profile page:
    
    US: https://www.amazon.com/profile
 
@@ -27,9 +27,9 @@ To install the script, follow these steps:
    FR: https://www.amazon.fr/profile
    
    etc. (just add `/profile` after your country's main Amazon URL)
-7. You should now see an additional section. Click the first button to fetch all your reviews.
-8. Wait for all your reviews to finish loading. Depending on the total amount, this might take a short while. It takes about 1 second to read 100 reviews.
-9. Repeat this process every now and then. All reviews with an updated hearts count will be shown separately.
+4. You should now see an additional section. Click the first button to fetch all your reviews.
+5. Wait for all your reviews to finish loading. Depending on the total amount, this might take a short while. It takes about 1 second to read 100 reviews.
+6. Repeat this process every now and then. All reviews with an updated hearts count will be shown separately.
 
 ## **Notes**
 
