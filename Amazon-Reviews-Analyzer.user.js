@@ -3,7 +3,7 @@
 // @namespace    https://violentmonkey.github.io
 // @description  Filters and sorts all helpful reviews of your own account
 // @author       DiscoJay
-// @version      2.2.1
+// @version      2.3.0
 // @license      GPL
 // @match        *://www.amazon.com/gp/profile/amzn1.account.*
 // @match        *://www.amazon.ae/gp/profile/amzn1.account.*
@@ -33,7 +33,7 @@
 // ==/UserScript==
 
 // ==================== Configuration ====================
-const RELEASE_DATE = '2025-07-28';
+const RELEASE_DATE = '2026-04-28';
 const DEBUG_MODE = false;
 const REVIEWS_PER_PAGE = 100; // Number of reviews to load with each request (max: 100)
 const MAX_ITERATIONS = 0; // Maximum number of requests (for testing purposes); Use 0 for no limit
@@ -115,6 +115,7 @@ function createReviewsAnalyzerBlock() {
         analyzeButton.style.cursor = "not-allowed";
         analyzeButton.classList.add('disabled');
         araReviews.style.display = "block";
+        enterScanMode();
         processAndShowContent();
     });
 
@@ -857,12 +858,24 @@ function fetchNextPage(baseUrl, pageToken) {
 }
 
 /**
+ * Hides Amazon's native profile navigation and review list before the scan starts.
+ * The native list's lazy-load on scroll would otherwise compete with our rate-limited
+ * review fetches.
+ */
+function enterScanMode() {
+    const selectors = ['.profile-navigation-container', '#profileReviewsContainer'];
+    for (const sel of selectors) {
+        const el = document.querySelector(sel);
+        if (el) el.style.display = 'none';
+    }
+}
+
+/**
  * Main function to orchestrate the fetching of reviews.
  */
 async function processAndShowContent() {
     try {
         log('Amazon Reviews Analyzer: Start');
-        // Removed the preventScrollingEvents call as per user request
         reviewData = []; // Clear existing data
 
         const baseUrl = getBaseUrl();
@@ -874,7 +887,7 @@ async function processAndShowContent() {
             const result = await fetchNextPage(baseUrl, currentToken);
             currentToken = result.nextPageToken || null;
 
-            araReviews.innerHTML = `<div style="margin: 50px 0px">⏳ <b>Loading reviews, please wait... (Do not scroll down during the scan!)</b><br>Page: ${iteration + 1}, Reviews: ${reviewData.length}</div>`;
+            araReviews.innerHTML = `<div style="margin: 50px 0px">⏳ <span style="display:inline-block;vertical-align:top"><b>Loading reviews, please wait...</b><br>Page: ${iteration + 1}, Reviews: ${reviewData.length}</span></div>`;
 
             // Adds a pause - Too frequent requests may result in temporary access bans
             await new Promise(resolve => setTimeout(resolve, REQUEST_DELAY));
